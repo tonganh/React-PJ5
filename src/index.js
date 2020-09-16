@@ -3,9 +3,25 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom';
 
+// function Square(props) {
+//     console.log(props);
+//     return (
+//     <button  className="square" onClick={props.onClick}>
+//       {props.value}
+//     </button>
+//   );
+// }
+
+
 function Square(props) {
+  let color = 'transparent'
+  if (props.value === 'X') {
+    color = 'red'
+  } else if (props.value === 'O') {
+    color = 'blue'
+  }
   return (
-    <button className="square" onClick={props.onClick}>
+    <button className="square" style={{color}} onClick={props.onClick}>
       {props.value}
     </button>
   );
@@ -74,6 +90,7 @@ class Game extends React.Component {
       history:[
         {
           squares:Array(9).fill(null),
+          // history have an array with 9 elements. 
         }
       ],
       stepNumber:0,
@@ -82,17 +99,22 @@ class Game extends React.Component {
   }
   handleClick(i) {
     const history=this.state.history.slice(0,this.state.stepNumber+1);
+    //  nó còn có nhiệm vụ trong việ truy hồi các hành động đã xảy ra. nên lấy step+1.-thừa 1 vị trí cho phần tử chèn tiếp theo chăng?.
     const current=history[history.length-1];
     const squares = current.squares.slice();
     if (calculateWinner(squares) || squares[i]) {
       return;
     }
     squares[i] = this.state.xIsNext ? 'X' : 'O';
+    // This set the value display in board.
     this.setState({
       history:history.concat([{      squares: squares,
+        //SAme with decalre new in this.state.
       }]),
       stepNumber:history.length,
       xIsNext: !this.state.xIsNext,
+      // Set State after you clikc/action in board.
+      // Sate of parent.
     });
   }
   jumpTo(step)
@@ -129,7 +151,9 @@ class Game extends React.Component {
         <div className="game-board">
           <Board
         squares={current.squares}
+        // Bring the location now and update value in the squares.
         onClick={(i)=> this.handleClick(i)}
+        //get the next action.
          />
         </div>
         <div className="game-info">
